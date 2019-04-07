@@ -7,8 +7,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\HolaMundo.ts",
+            "name": "Launch ${fileExtname}",
+            "program": "${workspaceFolder}\\main.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
