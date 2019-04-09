@@ -1,5 +1,5 @@
 import {MidiPlayer} from './midi-player';
-import {Chord, note} from "./Notes&Chords";
+import {Chord, note,getLongerTrail,pasingNumber} from "./Notes&Chords";
 
 
 const SONG_DURATION = 2 *  60 * 1000; // 2 minutes song milisegundos
@@ -19,20 +19,59 @@ for (let i = 0; i < AMOUNT_OF_NOTES; i++) { // intentando que el random me lleve
 }
 
 const SortedSong= new MidiPlayer(song);
-
-console.log(SortedSong);
-
 let Acordes:Array<Chord>=new Array();
-let nota:note;
-let insertada:boolean=true;
+let nota:note;var insertada:boolean=true;
+Acordes[0]=new Chord();
 for(let i=0,x=0;i<SortedSong.song.length;){
   nota=new note(SortedSong.song[i][0],SortedSong.song[i][1],SortedSong.song[i][2])
-  Acordes[x].addNote(nota,insertada);
-  if(insertada)
+  if(Acordes[x].addNote(nota)){
     i++;
-  else
-    x++;
+    //console.log(Acordes[x]);
+  }
+  else{
+    if(Acordes[x].currentNotes==3){
+      //console.log("Cambio de acorde");
+      //console.log(Acordes[x]);
+      x++;
+    }
+    Acordes[x]=new Chord;   
+  }
+  
+}
+if(Acordes[Acordes.length-1].currentNotes!=3)
+  Acordes.pop();
+  //console.log(Acordes[x]);
+
+var maxChordValue:number=0;
+var chosenPos:Array<number>=new Array();
+var tempPos:Array<number>=new Array();
+//var sumadoSoFar:pasingNumber= new pasingNumber();
+//sumadoSoFar.numero=0;
+for(let i=0;i<Acordes.length;i++){  
+  if(Acordes[i].chordValue==0){
+    tempPos=new Array();
+    getLongerTrail(Acordes,i,tempPos);    
+  }
+  if(Acordes[i].chordValue>maxChordValue){
+    maxChordValue=Acordes[i].chordValue;
+    chosenPos=tempPos;
+  }
+  //sumadoSoFar.numero=0;
+  
 }
 
-console.log(Acordes);
+console.log("Camino mas largo:");
+console.log(chosenPos.length);
+chosenPos.sort();let cantAcordes=0;
+for(let k=0;k<chosenPos.length;k++){
+  if(!Acordes[chosenPos[k]].marcado){
+    console.log(Acordes[chosenPos[k]]);
+    Acordes[chosenPos[k]].marcado=true;
+    cantAcordes++;
+  }
+}
+console.log("Con una longitud de:",maxChordValue);
+console.log("con ",cantAcordes," cantidad de acordes");
+
+//console.log(Acordes);
 

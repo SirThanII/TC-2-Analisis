@@ -18,16 +18,55 @@ for (var i = 0; i < AMOUNT_OF_NOTES; i++) { // intentando que el random me lleve
     ]); // timeline
 }
 var SortedSong = new midi_player_1.MidiPlayer(song);
-console.log(SortedSong);
 var Acordes = new Array();
 var nota;
 var insertada = true;
+Acordes[0] = new Notes_Chords_1.Chord();
 for (var i = 0, x = 0; i < SortedSong.song.length;) {
     nota = new Notes_Chords_1.note(SortedSong.song[i][0], SortedSong.song[i][1], SortedSong.song[i][2]);
-    Acordes[x].addNote(nota, insertada);
-    if (insertada)
+    if (Acordes[x].addNote(nota)) {
         i++;
-    else
-        x++;
+        //console.log(Acordes[x]);
+    }
+    else {
+        if (Acordes[x].currentNotes == 3) {
+            //console.log("Cambio de acorde");
+            //console.log(Acordes[x]);
+            x++;
+        }
+        Acordes[x] = new Notes_Chords_1.Chord;
+    }
 }
-console.log(Acordes);
+if (Acordes[Acordes.length - 1].currentNotes != 3)
+    Acordes.pop();
+//console.log(Acordes[x]);
+var maxChordValue = 0;
+var chosenPos = new Array();
+var tempPos = new Array();
+//var sumadoSoFar:pasingNumber= new pasingNumber();
+//sumadoSoFar.numero=0;
+for (var i = 0; i < Acordes.length; i++) {
+    if (Acordes[i].chordValue == 0) {
+        tempPos = new Array();
+        Notes_Chords_1.getLongerTrail(Acordes, i, tempPos);
+    }
+    if (Acordes[i].chordValue > maxChordValue) {
+        maxChordValue = Acordes[i].chordValue;
+        chosenPos = tempPos;
+    }
+    //sumadoSoFar.numero=0;
+}
+console.log("Camino mas largo:");
+console.log(chosenPos.length);
+chosenPos.sort();
+var cantAcordes = 0;
+for (var k = 0; k < chosenPos.length; k++) {
+    if (!Acordes[chosenPos[k]].marcado) {
+        console.log(Acordes[chosenPos[k]]);
+        Acordes[chosenPos[k]].marcado = true;
+        cantAcordes++;
+    }
+}
+console.log("Con una longitud de:", maxChordValue);
+console.log("con ", cantAcordes, " cantidad de acordes");
+//console.log(Acordes);
