@@ -145,6 +145,12 @@ export class Chord{
         if(resultado%12==0){
             return true;
         }
+        if(resultado%13==0){
+            return true;
+        }
+        if(resultado%11==0){
+            return true;
+        }
         if((resultado+1)==nota){
             return true;
         }
